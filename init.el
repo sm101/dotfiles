@@ -1,4 +1,3 @@
-
 (require 'paren)
 (show-paren-mode)
 (setq-default dabbrev-case-replace nil)
@@ -69,7 +68,7 @@
  '(case-fold-search t)
  '(column-number-mode t)
  '(current-language-environment "Latin-2")
- '(custom-enabled-themes (quote (tango)))
+ '(custom-enabled-themes (quote (wombat)))
  '(default-input-method "latin-2-prefix")
  '(delete-selection-mode nil nil (delsel))
  '(display-time-mode t)
@@ -122,39 +121,42 @@
 (which-function-mode 1)
 
 ;; gtags
-(add-to-list 'load-path "/usr/local/share/gtags")
-(autoload 'gtags-mode "gtags" "" t)
+;; (add-to-list 'load-path "/usr/local/share/gtags")
+;; (autoload 'gtags-mode "gtags" "" t)
 
-(add-hook 'gtags-mode-hook 
-  (lambda()
-    (local-set-key (kbd "M-.") 'gtags-find-tag)   ; find a tag, also M-.
-    (local-set-key (kbd "M-,") 'gtags-find-rtag)))  ; reverse tag
+;; (add-hook 'gtags-mode-hook 
+;;   (lambda()
+;;     (local-set-key (kbd "M-.") 'gtags-find-tag)   ; find a tag, also M-.
+;;     (local-set-key (kbd "M-,") 'gtags-find-rtag)))  ; reverse tag
 
-(add-hook 'c-mode-common-hook
-  (lambda ()
-    (require 'gtags)
-    (gtags-mode t)))
-(add-hook 'c++-mode-common-hook
-  (lambda ()
-    (require 'gtags)
-    (gtags-mode t)))
+;; (add-hook 'c-mode-common-hook
+;;   (lambda ()
+;;     (require 'gtags)
+;;     (gtags-mode t)))
+;; (add-hook 'c++-mode-common-hook
+;;   (lambda ()
+;;     (require 'gtags)
+;;     (gtags-mode t)))
 
-(defun gtags-root-dir ()
-  "Returns GTAGS root directory or nil if doesn't exist."
-  (with-temp-buffer
-    (if (zerop (call-process "global" nil t nil "-pr"))
-        (buffer-substring (point-min) (1- (point-max)))
-      nil)))
 
-(defun gtags-update ()
-  "Make GTAGS incremental update"
-  (call-process "global" nil nil nil "-u"))
 
-(defun gtags-update-hook ()
-  (when (gtags-root-dir)
-    (gtags-update)))
+;; (defun gtags-root-dir ()
+;;   "Returns GTAGS root directory or nil if doesn't exist."
+;;   (with-temp-buffer
+;;     (if (zerop (call-process "global" nil t nil "-pr"))
+;;         (buffer-substring (point-min) (1- (point-max)))
+;;       nil)))
 
-(add-hook 'after-save-hook #'gtags-update-hook)
+;; (defun gtags-update ()
+;;   "Make GTAGS incremental update"
+;;   (call-process "global" nil nil nil "-u"))
+
+;; (defun gtags-update-hook ()
+;;   (when (gtags-root-dir)
+;;     (gtags-update)))
+
+;; (add-hook 'after-save-hook #'gtags-update-hook)
+
 
 (scroll-bar-mode 0)
 
@@ -195,3 +197,39 @@ buffer is not visiting a file."
 (add-hook 'c++-mode-hook
           (lambda () (setq flycheck-gcc-include-path
                            (list "/workspace/blackbird/plx/poc" "/workspace/blackbird/dpdk/x86_64-wsm-linuxapp-gcc/include"))))
+
+;; ede
+(global-ede-mode t)
+(ede-cpp-root-project "blackbird" :file "/workspace/blackbird/plx/poc/Makefile"
+                      :include-path '( "/"))
+
+(semantic-mode 1)
+
+(require 'company)
+(add-hook 'after-init-hook 'global-company-mode)
+
+;; function args begin
+(require 'function-args)
+(fa-config-default)
+(require 'cc-mode)
+(define-key c-mode-map  [(control tab)] 'moo-complete)
+(define-key c++-mode-map  [(control tab)] 'moo-complete)
+(define-key c-mode-map (kbd "M-o")  'fa-show)
+(define-key c++-mode-map (kbd "M-o")  'fa-show)
+;; function args end
+
+;; ggtags
+(require 'ggtags)
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+              (ggtags-mode 1))))
+(define-key ggtags-mode-map (kbd "C-c g s") 'ggtags-find-other-symbol)
+(define-key ggtags-mode-map (kbd "C-c g h") 'ggtags-view-tag-history)
+(define-key ggtags-mode-map (kbd "C-c g r") 'ggtags-find-reference)
+(define-key ggtags-mode-map (kbd "C-c g f") 'ggtags-find-file)
+(define-key ggtags-mode-map (kbd "C-c g c") 'ggtags-create-tags)
+(define-key ggtags-mode-map (kbd "C-c g u") 'ggtags-update-tags)
+
+(define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)
+(provide 'setup-ggtags)
