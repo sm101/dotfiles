@@ -11,10 +11,10 @@
   '((c-mode . 3) (c++-mode . 3) (tcl-mode . 3)))
 
 ;; Index menu
-(require 'msb)
-;; handle .hpp as cc-mode files
-(setq auto-mode-alist (cons '("\\.hpp$" . c++-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.yac$" . c++-mode) auto-mode-alist))
+;; (require 'msb)
+;; ;; handle .hpp as cc-mode files
+;; (setq auto-mode-alist (cons '("\\.hpp$" . c++-mode) auto-mode-alist))
+;; (setq auto-mode-alist (cons '("\\.yac$" . c++-mode) auto-mode-alist))
 
 ;;Nostalgia from 1995
 (defun jumpmatch ()
@@ -99,8 +99,6 @@
 
 (global-set-key "\e2" 'goto-line)
 (global-set-key "\e3" 'recompile)
-;; Jump to the next tag
-(global-set-key "\e7" '"^UESCxfind-tag")
 
 (require 'recentf)
 (recentf-mode)
@@ -119,44 +117,6 @@
 
 (setq default-tab-width 4)
 (which-function-mode 1)
-
-;; gtags
-;; (add-to-list 'load-path "/usr/local/share/gtags")
-;; (autoload 'gtags-mode "gtags" "" t)
-
-;; (add-hook 'gtags-mode-hook 
-;;   (lambda()
-;;     (local-set-key (kbd "M-.") 'gtags-find-tag)   ; find a tag, also M-.
-;;     (local-set-key (kbd "M-,") 'gtags-find-rtag)))  ; reverse tag
-
-;; (add-hook 'c-mode-common-hook
-;;   (lambda ()
-;;     (require 'gtags)
-;;     (gtags-mode t)))
-;; (add-hook 'c++-mode-common-hook
-;;   (lambda ()
-;;     (require 'gtags)
-;;     (gtags-mode t)))
-
-
-
-;; (defun gtags-root-dir ()
-;;   "Returns GTAGS root directory or nil if doesn't exist."
-;;   (with-temp-buffer
-;;     (if (zerop (call-process "global" nil t nil "-pr"))
-;;         (buffer-substring (point-min) (1- (point-max)))
-;;       nil)))
-
-;; (defun gtags-update ()
-;;   "Make GTAGS incremental update"
-;;   (call-process "global" nil nil nil "-u"))
-
-;; (defun gtags-update-hook ()
-;;   (when (gtags-root-dir)
-;;     (gtags-update)))
-
-;; (add-hook 'after-save-hook #'gtags-update-hook)
-
 
 (scroll-bar-mode 0)
 
@@ -202,9 +162,7 @@ buffer is not visiting a file."
 (global-ede-mode t)
 (ede-cpp-root-project "blackbird" :file "/workspace/blackbird/plx/poc/Makefile"
                       :include-path '( "/"))
-
 (semantic-mode 1)
-
 (require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
 
