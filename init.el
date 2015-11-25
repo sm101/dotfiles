@@ -156,11 +156,11 @@ buffer is not visiting a file."
 ;; flymake
 (add-hook 'c++-mode-hook
           (lambda () (setq flycheck-gcc-include-path
-                           (list "/workspace/blackbird/plx/poc" "/workspace/blackbird/dpdk/x86_64-wsm-linuxapp-gcc/include"))))
+                           (list "/workspace/blackbird/plx/poc" "/workspace/blackbird/userspace-rcu" "/workspace/blackbird/dpdk/x86_64-wsm-linuxapp-gcc/include"))))
 
 ;; ede
 (global-ede-mode t)
-(ede-cpp-root-project "blackbird" :file "/workspace/blackbird/plx/poc/Makefile"
+(ede-cpp-root-project "blackbird" :file "/workspace/blackbird.git/plx/poc/Makefile"
                       :include-path '( "/"))
 (semantic-mode 1)
 (require 'company)
